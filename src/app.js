@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import express  from "express";
 import productRouter from "./routers/product";
+import categoryRouter from "./routers/category";
+
 import authRouter from "./routers/auth"
 import cors from "cors";
 
@@ -10,6 +12,9 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api', productRouter)
+
+app.use('/api', categoryRouter)
+
 app.use('/api', authRouter)
 
 

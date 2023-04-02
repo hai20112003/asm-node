@@ -1,31 +1,25 @@
-import Product from "../models/product"
+import Category from "./../models/category"
+import Product from "./../models/product"
+
 import joi from "joi"
 
-const productSchema = joi.object({
+const categorySchema = joi.object({
     name: joi.string().required(),
-    price: joi.number().required(),
 })
 
 export const create = async(req, res) =>{
     try {
-        const {error} = productSchema.validate(req.body);
+        const {error} = categorySchema.validate(req.body);
         if(error){
             res.json({
                 message: error.details[0].message
             })
         }
-        const product = await Product.create(req.body)
-        return res.status(201).json(product)
-    } catch (error) {
-        return res.status(400).json({
-            message: error
+        const category = await Category.create(req.body)
+        return res.status(201).json({
+            message: "Thêm danh mục thành công",
+            category
         })
-    }
-}
-export const getAll = async(req, res) =>{
-    try {
-        const products = await Product.find()
-        return res.status(201).json(products)
     } catch (error) {
         return res.status(400).json({
             message: error
@@ -35,8 +29,28 @@ export const getAll = async(req, res) =>{
 
 export const get= async(req, res) =>{
     try {
-        const product = await Product.findById(req.params.id);
-        return res.status(201).json(product)
+        const category = await Category.findById(req.params.id);
+        if(!category){
+            return res.status(400).json({
+                message: "Không có danh mục nào",
+            })
+        }
+        const product = await Product.find({categoryId: req.params.id});
+        
+        return res.status(201).json({...category.toObject(), product});
+    } catch (error) {
+        return res.status(400).json({
+            message: error
+        })
+    }
+}
+export const getAll= async(req, res) =>{
+    try {
+        const data = await Category.find();
+        return res.status(201).json({
+            message: "Danh sách",
+            data
+        })
     } catch (error) {
         return res.status(400).json({
             message: error
@@ -45,14 +59,17 @@ export const get= async(req, res) =>{
 }
 export const update= async(req, res) =>{
     try {
-        const {error} = productSchema.validate(req.body);
+        const {error} = categorySchema.validate(req.body);
         if(error){
             res.status(400),json({
                 message: error.details[0].message
             })
         }
-        const product = await Product.findOneAndUpdate({_id: req.params.id}, req.body, {new:true});
-        return res.json(product)
+        const category = await Category.findOneAndUpdate({_id: req.params.id}, req.body, {new:true});
+        return res.json({
+            message: "Sửa danh mục thành công",
+            category
+        })
     } catch (error) {
         return res.status(400).json({
             message: error
@@ -61,8 +78,11 @@ export const update= async(req, res) =>{
 }
 export const remove= async(req, res) =>{
     try {
-        const product = await Product.findOneAndRemove({_id: req.params.id});
-        return res.json(product)
+        const category = await Category.findOneAndRemove({_id: req.params.id});
+        return res.json({
+            message: "Xóa danh mục thành công",
+            category
+        })
     } catch (error) {
         return res.status(400).json({
             message: error
