@@ -1,9 +1,12 @@
+import Category from "../models/category";
 import Product from "../models/product"
 import joi from "joi"
 
 const productSchema = joi.object({
     name: joi.string().required(),
     price: joi.number().required(),
+    image: joi.string(),
+    description: joi.string(),
     categoryId: joi.string().required(),
 })
 
@@ -16,6 +19,11 @@ export const create = async(req, res) =>{
             })
         }
         const product = await Product.create(req.body)
+        await Category.findByIdAndUpdate(product.categoryId,{
+            $addToSet: {
+                products: product._id,
+            }
+        })
         return res.status(201).json({
             message: "Thêm sản phẩm thành công",
             product

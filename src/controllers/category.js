@@ -29,7 +29,7 @@ export const create = async(req, res) =>{
 
 export const get= async(req, res) =>{
     try {
-        const category = await Category.findById(req.params.id);
+        const category = await Category.findById(req.params.id).populate("products");
         if(!category){
             return res.status(400).json({
                 message: "Không có danh mục nào",
@@ -37,7 +37,7 @@ export const get= async(req, res) =>{
         }
         const product = await Product.find({categoryId: req.params.id});
         
-        return res.status(201).json({...category.toObject(), product});
+        return res.status(201).json(category);
     } catch (error) {
         return res.status(400).json({
             message: error
