@@ -3,6 +3,7 @@ import Product from "../models/product"
 import joi from "joi"
 
 const productSchema = joi.object({
+    _id: joi.string(),
     name: joi.string().required(),
     price: joi.number().required(),
     image: joi.string(),
@@ -30,7 +31,7 @@ export const create = async(req, res) =>{
         })
     } catch (error) {
         return res.status(400).json({
-            message: error
+            message: error.message
         })
     }
 }
@@ -65,18 +66,17 @@ export const update= async(req, res) =>{
     try {
         const {error} = productSchema.validate(req.body);
         if(error){
-            res.status(400),json({
+            res.status(400).json({
                 message: error.details[0].message
             })
         }
         const product = await Product.findOneAndUpdate({_id: req.params.id}, req.body, {new:true});
         return res.json({
-            message: "Sửa sản phẩm thành công",
             product
         })
     } catch (error) {
         return res.status(400).json({
-            message: error
+            message: error.message
         })
     }
 }
