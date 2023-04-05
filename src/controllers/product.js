@@ -27,11 +27,25 @@ export const create = async (req, res) => {
   }
 };
 export const getAll = async (req, res) => {
-  try {
-    const data = await Product.find();
-    return res.status(201).json({
+  const { _sort = "createAt", _order = "asc", _limit = 10, _page = 1 } = req.query;
+
+    const options = {
+        page: _page,
+        limit: _limit,
+        sort: {
+            [_sort]: _order == "desc" ? -1 : 1,
+        },
+    };
+try{
+    const { docs, totalDocs, totalPages } = await Product.paginate({}, options);
+    if(docs.length === 0) {
+      return res.status(400).json({ message: "Không có sản phẩm nào" });
+    }
+    return res.status(200).json({
       message: "Danh sách",
-      data,
+      data: docs,
+      totalDocs,
+      totalPages
     });
   } catch (error) {
     return res.status(400).json({
@@ -43,9 +57,13 @@ export const getAll = async (req, res) => {
 export const get = async (req, res) => {
   try {
     const data = await Product.findById(req.params.id).populate(
-      "categoryId",
-      "-__v"
+      "categoryId"
     );
+    if(!data) {
+      return res.status(400).json({
+        message: "Không có sản phẩm nào",
+      });
+    }
     return res.status(201).json({
       message: "Danh sách",
       data,
@@ -70,6 +88,11 @@ export const update = async (req, res) => {
       req.body,
       { new: true }
     );
+    if(!product){
+      return res.status(400).json({
+        message: "Cập nhập thất bại",
+      });
+    }
     return res.json({
       message: "Sửa sản phẩm thành công",
       product,

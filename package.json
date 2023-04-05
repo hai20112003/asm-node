@@ -16,6 +16,7 @@
     "joi": "^17.9.0",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.2",
+    "mongoose-paginate-v2": "^1.7.1",
     "vite": "^4.2.1",
     "vite-plugin-node": "^3.0.2"
   }
