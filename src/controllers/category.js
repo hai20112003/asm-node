@@ -1,6 +1,6 @@
 import Category from "./../models/category";
 import Product from "./../models/product";
-
+import { categorySchema } from "../Schemas/category";
 export const create = async (req, res) => {
   try {
     const { error } = categorySchema.validate(req.body);
