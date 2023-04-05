@@ -78,7 +78,7 @@ export const update = async (req, res) => {
   try {
     const { error } = productSchema.validate(req.body);
     if (error) {
-      res.status(400),
+      res.status(400).
         json({
           message: error.details[0].message,
         });
