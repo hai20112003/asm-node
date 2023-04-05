@@ -10,7 +10,7 @@ export const signup = async (req, res) => {
             const errors = error.details.map((err) => err.message);
             // ['Trường tên là bắt buộc', 'Email không đúng định dạng']
             return res.status(400).json({
-                messsages: errors,
+                messages: errors,
             });
         }
         const userExist = await User.findOne({ email: req.body.email });
@@ -37,7 +37,7 @@ export const signup = async (req, res) => {
         });
     } catch (error) {
         return res.status(400).json({
-            message: error,
+            message: error.message
         });
     }
 };
@@ -75,7 +75,7 @@ export const signin = async (req, res) =>  {
         });
     } catch (error) {
         return res.status(400).json({
-            message: error,
+            message: error.message
         });
     }
 }
