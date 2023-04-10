@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/products",checkPermission, create)
 router.get("/products", getAll)
-router.get("/products/:id",checkPermission, get)
+router.get("/products/:id", get)
 router.put("/products/:id",checkPermission, update)
 router.delete("/products/:id",checkPermission, remove)
 
