@@ -1,0 +1,3 @@
+- Hiện thị product, thêm sửa Xóa, tìm kiếm
+- Hiện thị category, thêm sửa Xóa,tìm kiếm
+- Đăng nhập đăng ký, check quền

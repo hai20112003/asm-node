@@ -1,3 +1,4 @@
+// Làm đăng ký đăng nhập
 import User from "../models/user";
 import { signinSchema, signupSchema } from './../Schemas/auth';
 import bcrypt from "bcryptjs";
